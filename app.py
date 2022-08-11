@@ -202,7 +202,7 @@ def recentNews1(name):
         time = div.find('time',class_='WW6dff uQIVzc Sksgp slhocf').text
         text = div1 + ' ' + time
         news.append(text)
-        if("hours" in time or "Yesterday" in time and "days" not in time):
+        if("hours" in time or "Yesterday" in time):
             df1 = pd.DataFrame(data=[[div1,time]],columns=["News", "Time"])
             df = pd.concat([df,df1], axis=0)
             df = df.sort_values(by=['Time'], ascending=True)
