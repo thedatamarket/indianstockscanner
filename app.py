@@ -71,7 +71,7 @@ def allNews(name):
         # print(div.find().text)
         div1 = div.find('h3',class_='ipQwMb ekueJc RD0gLb').text
         time = div.find('div',class_='SVJrMe')
-        time = div.find('time',class_='WW6dff uQIVzc Sksgp').text
+        time = div.find('time',class_='WW6dff uQIVzc Sksgp slhocf').text
         text = div1 + ' ' + time
         news.append(text)
         if("hours" in text):
