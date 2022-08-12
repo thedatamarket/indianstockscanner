@@ -316,6 +316,7 @@ def test():
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id='+ bot_chatID + '&parse_mode=MarkdownV2&text=' + txt
     response = requests.get(send_text)
     print(response.json())
+    
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
