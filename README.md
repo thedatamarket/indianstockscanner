@@ -1,2 +1,2 @@
 # indianstockscanner
-heroku app 
+https://indianstockscanner-pre.herokuapp.com/
