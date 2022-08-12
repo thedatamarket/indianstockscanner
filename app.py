@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import time
-from datetime import datetime
-from flask import request
+from datetime import datetime, date
+from flask import request, make_response
 import yfinance as yf
 import dropbox
 import pandas as pd
@@ -316,6 +316,21 @@ def test():
     send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id='+ bot_chatID + '&parse_mode=MarkdownV2&text=' + txt
     response = requests.get(send_text)
     print(response.json())
+
+@app.route('/custom/analysis/csv/<name>/<period>/<interval>') 
+def csv(name,period,interval):
+    today = date.today()
+    d4 = today.strftime("%b-%d-%Y")
+    nameNS = name + '.NS'
+    df = yf.download(tickers=nameNS, period=period, interval=interval)
+    df[interval] = df['Close'].pct_change()*100
+    df.to_csv(name + ".csv")
+    #return df.to_html()
+    filename = str(d4) + "_" +name + "_" + str(period) + ".csv"
+    resp = make_response(df.to_csv())
+    resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
+    resp.headers["Content-Type"] = "text/csv"
+    return resp
     
 
 if __name__ == "__main__":
