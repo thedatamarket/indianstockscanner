@@ -336,6 +336,7 @@ def csv(name,period,interval):
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
     query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
+    print(query)
     # query = "t"
     tweets = []
     limit = count
@@ -351,7 +352,7 @@ def tweet(id,count):
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
     return df.to_html()
-    
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
