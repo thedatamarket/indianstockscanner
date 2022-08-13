@@ -333,14 +333,14 @@ def csv(name,period,interval):
     resp.headers["Content-Type"] = "text/csv"
     return resp
 
-@app.route('/tweet/<id>') 
-def tweet(id):
+@app.route('/tweet/<id>/<count>') 
+def tweet(id,count):
     #query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
     query = "(from:"+str(id)+")"
     #print(query)
     # query = "t"
     tweets = []
-    limit = 10
+    limit = count
 
     for tweet in sntwitter.TwitterSearchScraper(query).get_items():
         
