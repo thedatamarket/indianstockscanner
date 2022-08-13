@@ -340,7 +340,7 @@ def tweet(id,count):
     #print(query)
     # query = "t"
     tweets = []
-    limit = count
+    limit = int(count)
 
     for tweet in sntwitter.TwitterSearchScraper(query).get_items():
         
