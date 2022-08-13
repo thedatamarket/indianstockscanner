@@ -317,7 +317,7 @@ def test():
     response = requests.get(send_text)
     print(response.json())
 
-@app.route('/custom/analysis/csv/<name>/<period>/<interval>') 
+@app.route('/custom/analysis/<name>/<period>/<interval>/csv') 
 def csv(name,period,interval):
     today = date.today()
     d4 = today.strftime("%b-%d-%Y")
