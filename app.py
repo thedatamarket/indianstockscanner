@@ -335,7 +335,8 @@ def csv(name,period,interval):
 
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
-    query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
+    #query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
+    query = "(from:ArjunsinghWB)"
     print(query)
     # query = "t"
     tweets = []
