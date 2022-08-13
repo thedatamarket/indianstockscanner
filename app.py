@@ -333,10 +333,10 @@ def csv(name,period,interval):
     resp.headers["Content-Type"] = "text/csv"
     return resp
 
-@app.route('/tweet') 
-def tweet():
+@app.route('/tweet/<id>') 
+def tweet(id):
     #query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
-    query = "(from:ArjunsinghWB)"
+    query = "(from:"+str(id)+")"
     #print(query)
     # query = "t"
     tweets = []
