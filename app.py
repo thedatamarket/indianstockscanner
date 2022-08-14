@@ -347,10 +347,11 @@ def tweet(id,count):
             break
         else:
             link = tweet.content.split('https://')
-            if len(link) > 0:
+            print(len(link))
+            if len(link) > 1:
                 link1 = link[1]
             else:
-                link1 = 'None'
+                link1 = ''
             tweets.append([tweet.date, tweet.username, tweet.content,link1])
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
@@ -366,8 +367,15 @@ def tweetcsv(id,count):
         if len(tweets) == limit:
             break
         else:
-            tweets.append([tweet.date, tweet.username, tweet.content])
-    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
+            link = tweet.content.split('https://')
+            print(len(link))
+            if len(link) > 1:
+                link1 = link[1]
+            else:
+                link1 = ''
+            tweets.append([tweet.date, tweet.username, tweet.content,link1])
+            
+    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
     df.to_csv(id + ".csv")
     filename = str(id) + "_" + str(count) + ".csv"
     resp = make_response(df.to_csv())
