@@ -6,7 +6,7 @@ import requests
 import csv
 import time
 from datetime import datetime, date
-from flask import request, make_response
+from flask import request, make_response,redirect, url_for
 import yfinance as yf
 import dropbox
 import pandas as pd
@@ -386,6 +386,16 @@ def tweetcsv(id,count):
     resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
     resp.headers["Content-Type"] = "text/csv"
     return resp
+
+
+@app.route('/twittersearch', methods =["GET", "POST"])
+def login():
+    if request.method == "POST":
+        user = request.form["id"]
+        count = request.form["cnt"]
+        return redirect(url_for("tweet", id=user, count = count))
+    else:
+	    return render_template("search.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
