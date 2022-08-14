@@ -286,8 +286,8 @@ def analysis(name,period,interval):
     df[interval] = df['Close'].pct_change()*100
     return df.to_html()
 
-@app.route('/test')
-def test():
+@app.route('/sector')
+def sector():
     now = datetime.now()
     file1 = str(now.strftime("%d%m%Y"))
 
@@ -354,6 +354,42 @@ def tweet(id,count):
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
     return df.to_html()
 
+@app.route('/test/<id>/<count>') 
+def test(id,count):
+    query_list = 'http://indianstockscanner-pre/test/' + str(id) + '/'+ str(count) + '/csv'
+    query = "(from:"+str(id)+")"
+    #print(query)
+    # query = "t"
+    tweets = []
+    limit = int(count)
+
+    for tweet in sntwitter.TwitterSearchScraper(query).get_items():
+        if len(tweets) == limit:
+            break
+        else:
+            tweets.append([tweet.date, tweet.username, tweet.content])
+            
+    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
+    return render_template('view.html',tables=[df.to_html()], output=query_list)
+
+@app.route('/test/<id>/<count>/csv') 
+def testcsv(id,count):
+    query = "(from:"+str(id)+")"
+    tweets = []
+    limit = int(count)
+
+    for tweet in sntwitter.TwitterSearchScraper(query).get_items():
+        if len(tweets) == limit:
+            break
+        else:
+            tweets.append([tweet.date, tweet.username, tweet.content])
+    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
+    df.to_csv(id + ".csv")
+    filename = str(id) + "_" + str(count) + ".csv"
+    resp = make_response(df.to_csv())
+    resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
+    resp.headers["Content-Type"] = "text/csv"
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
