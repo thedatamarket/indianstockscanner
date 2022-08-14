@@ -332,7 +332,7 @@ def csv(name,period,interval):
     resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
     resp.headers["Content-Type"] = "text/csv"
     return resp
-
+'''
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
     #query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
@@ -353,9 +353,9 @@ def tweet(id,count):
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
     return df.to_html()
-
-@app.route('/test/<id>/<count>') 
-def test(id,count):
+'''
+@app.route('/tweet/<id>/<count>') 
+def tweet(id,count):
     query_list = 'http://indianstockscanner-pre/test/' + str(id) + '/'+ str(count) + '/csv'
     query = "(from:"+str(id)+")"
     #print(query)
@@ -372,8 +372,8 @@ def test(id,count):
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
     return render_template('view.html',tables=[df.to_html()], output=query_list)
 
-@app.route('/test/<id>/<count>/csv') 
-def testcsv(id,count):
+@app.route('/tweet/<id>/<count>/csv') 
+def tweetcsv(id,count):
     query = "(from:"+str(id)+")"
     tweets = []
     limit = int(count)
