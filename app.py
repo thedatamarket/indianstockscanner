@@ -332,28 +332,7 @@ def csv(name,period,interval):
     resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
     resp.headers["Content-Type"] = "text/csv"
     return resp
-'''
-@app.route('/tweet/<id>/<count>') 
-def tweet(id,count):
-    #query = "(from:"+ str(id) +")" #until:2022-06-07 since:2010-01-01"
-    query = "(from:"+str(id)+")"
-    #print(query)
-    # query = "t"
-    tweets = []
-    limit = int(count)
 
-    for tweet in sntwitter.TwitterSearchScraper(query).get_items():
-        
-        # print(vars(tweet))
-        # break
-        if len(tweets) == limit:
-            break
-        else:
-            tweets.append([tweet.date, tweet.username, tweet.content])
-            
-    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
-    return df.to_html()
-'''
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
     query_list = 'http://indianstockscanner-pre/test/' + str(id) + '/'+ str(count) + '/csv'
@@ -367,9 +346,10 @@ def tweet(id,count):
         if len(tweets) == limit:
             break
         else:
-            tweets.append([tweet.date, tweet.username, tweet.content])
+            link = tweet.content.split('https://')
+            tweets.append([tweet.date, tweet.username, tweet.content,link])
             
-    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet'])
+    df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
     return render_template('view.html',tables=[df.to_html()], output=query_list)
 
 @app.route('/tweet/<id>/<count>/csv') 
