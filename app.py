@@ -346,8 +346,12 @@ def tweet(id,count):
         if len(tweets) == limit:
             break
         else:
-            link = tweet.content.split('https://')[1]
-            tweets.append([tweet.date, tweet.username, tweet.content,link])
+            link = tweet.content.split('https://')
+            if len(link) > 0:
+                link1 = link[1]
+            else:
+                link1 = 'None'
+            tweets.append([tweet.date, tweet.username, tweet.content,link1])
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
     return render_template('view.html',tables=[df.to_html()], output=query_list)
