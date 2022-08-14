@@ -346,7 +346,7 @@ def tweet(id,count):
         if len(tweets) == limit:
             break
         else:
-            link = tweet.content.split('https://')
+            link = tweet.content.split('https://')[1]
             tweets.append([tweet.date, tweet.username, tweet.content,link])
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
