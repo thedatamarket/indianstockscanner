@@ -281,10 +281,13 @@ def data1(name):
 
 @app.route('/custom/analysis/<name>/<period>/<interval>') 
 def analysis(name,period,interval):
+    query_list = 'https://indianstockscanner-pre.herokuapp.com/custom/analysis/' + str(name) + '/'+ str(period) + '/' + str(interval) +'/csv'
     nameNS = name + '.NS'
     df = yf.download(tickers=nameNS, period=period, interval=interval)
     df[interval] = df['Close'].pct_change()*100
-    return df.to_html()
+    df = df[df['Open'].notna()]
+    #return df.to_html()
+    return render_template('view.html',tables=[df.to_html()], output=query_list)
 
 @app.route('/sector')
 def sector():
@@ -325,6 +328,7 @@ def csv(name,period,interval):
     nameNS = name + '.NS'
     df = yf.download(tickers=nameNS, period=period, interval=interval)
     df[interval] = df['Close'].pct_change()*100
+    df = df[df['Open'].notna()]
     df.to_csv(name + ".csv")
     #return df.to_html()
     filename = str(d4) + "_" +name + "_" + str(period) + ".csv"
@@ -337,8 +341,6 @@ def csv(name,period,interval):
 def tweet(id,count):
     query_list = 'https://indianstockscanner-pre.herokuapp.com/tweet/' + str(id) + '/'+ str(count) + '/csv'
     query = "(from:"+str(id)+")"
-    #print(query)
-    # query = "t"
     tweets = []
     limit = int(count)
 
