@@ -397,6 +397,16 @@ def login():
     else:
 	    return render_template("search.html")
 
+@app.route('/stockhistory', methods =["GET", "POST"])
+def stockhistory():
+    if request.method == "POST":
+        ticker = request.form["ticker"]
+        period = request.form["period"]
+        interval = request.form["interval"]
+        return redirect(url_for("analysis", name=ticker, period = period, interval=interval))
+    else:
+	    return render_template("stockhistorysearch.html")
+
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
 
