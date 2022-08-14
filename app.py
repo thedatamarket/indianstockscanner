@@ -266,7 +266,7 @@ def StockData1(name):
     df = pd.read_csv(result.link, encoding= 'unicode_escape')
     df = df.sort_values(by=['Price'], ascending=False)
     #return df.to_html()
-    return render_template('view.html',tables=[df.to_html()], output=query_list)
+    return render_template('view.html',tables=[df.to_html()],heading = name, output=query_list)
 
 @app.route('/data/mf/<name>') 
 def data1(name):
@@ -321,7 +321,7 @@ def analysis(name,period,interval):
     df[interval] = df['Close'].pct_change()*100
     df = df[df['Open'].notna()]
     #return df.to_html()
-    return render_template('view.html',tables=[df.to_html()], output=query_list)
+    return render_template('view.html',tables=[df.to_html()],heading = nameNS, output=query_list)
 
 @app.route('/custom/analysis/<name>/<period>/<interval>/csv') 
 def csv(name,period,interval):
@@ -360,7 +360,7 @@ def tweet(id,count):
             tweets.append([tweet.date, tweet.username, tweet.content,link1])
             
     df = pd.DataFrame(tweets, columns=['Date', 'User', 'Tweet','Link'])
-    return render_template('view.html',tables=[df.to_html()], output=query_list)
+    return render_template('view.html',tables=[df.to_html()],heading = id, output=query_list)
 
 @app.route('/tweet/<id>/<count>/csv') 
 def tweetcsv(id,count):
@@ -417,7 +417,7 @@ def info(stock):
     temp = pd.DataFrame.from_dict(df.info, orient="index")
     temp.reset_index(inplace=True)
     temp.columns = ["Attribute", "Recent"]
-    return render_template('view.html',tables=[temp.to_html()], output=query_list)
+    return render_template('view.html',tables=[temp.to_html()],heading = stock, output=query_list)
 
 @app.route('/stockinfo', methods =["GET", "POST"])
 def stockinfo():
