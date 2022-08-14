@@ -281,16 +281,6 @@ def data1(name):
     df = pd.read_csv(result.link, encoding= 'unicode_escape')
     return df.to_html()
 
-@app.route('/custom/analysis/<name>/<period>/<interval>') 
-def analysis(name,period,interval):
-    query_list = 'https://indianstockscanner-pre.herokuapp.com/custom/analysis/' + str(name) + '/'+ str(period) + '/' + str(interval) +'/csv'
-    nameNS = name + '.NS'
-    df = yf.download(tickers=nameNS, period=period, interval=interval)
-    df[interval] = df['Close'].pct_change()*100
-    df = df[df['Open'].notna()]
-    #return df.to_html()
-    return render_template('view.html',tables=[df.to_html()], output=query_list)
-
 @app.route('/sector')
 def sector():
     now = datetime.now()
@@ -323,6 +313,16 @@ def sector():
     response = requests.get(send_text)
     print(response.json())
 
+@app.route('/custom/analysis/<name>/<period>/<interval>') 
+def analysis(name,period,interval):
+    query_list = 'https://indianstockscanner-pre.herokuapp.com/custom/analysis/' + str(name) + '/'+ str(period) + '/' + str(interval) +'/csv'
+    nameNS = name + '.NS'
+    df = yf.download(tickers=nameNS, period=period, interval=interval)
+    df[interval] = df['Close'].pct_change()*100
+    df = df[df['Open'].notna()]
+    #return df.to_html()
+    return render_template('view.html',tables=[df.to_html()], output=query_list)
+
 @app.route('/custom/analysis/<name>/<period>/<interval>/csv') 
 def csv(name,period,interval):
     today = date.today()
@@ -339,6 +339,7 @@ def csv(name,period,interval):
     resp.headers["Content-Type"] = "text/csv"
     return resp
 
+# TWITTER SEARCH FUNCTIONALITY
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
     query_list = 'https://indianstockscanner-pre.herokuapp.com/tweet/' + str(id) + '/'+ str(count) + '/csv'
@@ -406,6 +407,39 @@ def stockhistory():
         return redirect(url_for("analysis", name=ticker, period = period, interval=interval))
     else:
 	    return render_template("stockhistorysearch.html")
+
+# STOCK INFO FUNCTIONALITY
+@app.route('/info/<stock>') 
+def info(stock):
+    query_list = 'https://indianstockscanner-pre.herokuapp.com/info/' + str(stock) + '/csv'
+    tik = stock + '.NS'
+    df = yf.Ticker(tik)
+    temp = pd.DataFrame.from_dict(df.info, orient="index")
+    temp.reset_index(inplace=True)
+    temp.columns = ["Attribute", "Recent"]
+    return render_template('view.html',tables=[temp.to_html()], output=query_list)
+
+@app.route('/stockinfo', methods =["GET", "POST"])
+def stockinfo():
+    if request.method == "POST":
+        ticker = request.form["ticker"]
+        return redirect(url_for("info", stock=ticker))
+    else:
+	    return render_template("stockinfo.html")
+
+@app.route('/info/<stock>/csv') 
+def stockinfocsv(stock):
+    tik = stock + '.NS'
+    df = yf.Ticker(tik)
+    temp = pd.DataFrame.from_dict(df.info, orient="index")
+    temp.reset_index(inplace=True)
+    temp.columns = ["Attribute", "Recent"]
+    temp.to_csv(stock + ".csv")
+    filename = str(stock) + ".csv"
+    resp = make_response(temp.to_csv())
+    resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
+    resp.headers["Content-Type"] = "text/csv"
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
