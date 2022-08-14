@@ -335,7 +335,7 @@ def csv(name,period,interval):
 
 @app.route('/tweet/<id>/<count>') 
 def tweet(id,count):
-    query_list = 'http://indianstockscanner-pre.com/tweet/' + str(id) + '/'+ str(count) + '/csv'
+    query_list = 'https://indianstockscanner-pre.herokuapp.com/tweet/' + str(id) + '/'+ str(count) + '/csv'
     query = "(from:"+str(id)+")"
     #print(query)
     # query = "t"
