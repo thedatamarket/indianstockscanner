@@ -259,12 +259,14 @@ def liststockchange():
 def StockData1(name):
     # df = pd.read_csv(r'C:\Users\tanmo\Desktop\flaskProject\webPage\Output\stock_15032022.csv')
     dbx = dropbox.Dropbox("NVwGrPvFLxgAAAAAAAAAAVUBiyewqJ5KTDlXkSBRNBBsH2-aZ9iKQvRkP1bIDy_G")
+    query_list = 'https://indianstockscanner-pre.herokuapp.com//stockchange'
     dropbox_path= "/StockPriceDayChange/" + str(name)
     result = dbx.files_get_temporary_link(dropbox_path)
     print(result.link)
     df = pd.read_csv(result.link, encoding= 'unicode_escape')
     df = df.sort_values(by=['Price'], ascending=False)
-    return df.to_html()
+    #return df.to_html()
+    return render_template('view.html',tables=[df.to_html()], output=query_list)
 
 @app.route('/data/mf/<name>') 
 def data1(name):
