@@ -395,7 +395,7 @@ def login():
         count = request.form["cnt"]
         return redirect(url_for("tweet", id=user, count = count))
     else:
-	    return render_template("search.html")
+	    return render_template("twittersearch.html")
 
 @app.route('/stockhistory', methods =["GET", "POST"])
 def stockhistory():
