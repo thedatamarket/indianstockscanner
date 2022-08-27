@@ -14,4 +14,3 @@ dropbox==11.24.0
 requests==2.26.0
 yfinance==0.1.70
 snscrape==0.4.3.20220106
-lxml==4.6.3
