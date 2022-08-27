@@ -20,3 +20,5 @@ Now you need to allocate a dyno to do the work. Type 'heroku ps:scale worker=1'
 If you want to check the logs to make sure its working type 'heroku logs --tail'
 Now your code will continue to run until you stop the dyno. To stop it scale it down using the command 'heroku ps:scale worker=0'
 heroku run bash 
+
+developed by @tanmoy1999
