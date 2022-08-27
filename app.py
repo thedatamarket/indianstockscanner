@@ -457,7 +457,7 @@ def analysisapi(name,period,interval):
     # return df.to_html()
 
 #MMI
-@app.route('/mmi') 
+@app.route('/mmi') # https://indianstockscanner-pre.herokuapp.com/mmi
 def mmi():
     URL = 'https://www.tickertape.in/market-mood-index'
     HEADERS = ({'User-Agent':
@@ -471,6 +471,7 @@ def mmi():
     mmi = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/span')[0].text
     day = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/p/text()[2]')[0]
     return render_template("MMI.html",mmi_page = mmi,last_updated = day)   
+    
 
 
 
