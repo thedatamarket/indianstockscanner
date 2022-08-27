@@ -6,7 +6,8 @@ import requests
 import csv
 import time
 from datetime import datetime, date
-from flask import request, make_response,redirect, url_for
+from flask import request, make_response,redirect, url_for, Response
+from lxml import etree
 import yfinance as yf
 import dropbox
 import pandas as pd
@@ -440,6 +441,32 @@ def stockinfocsv(stock):
     resp.headers["Content-Disposition"] = "attachment; filename=" + str(filename)
     resp.headers["Content-Type"] = "text/csv"
     return resp
+
+# API Integration
+@app.route('/api/custom/analysis/<name>/<period>/<interval>') 
+def analysisapi(name,period,interval):
+    query_list = 'https://indianstockscanner-pre.herokuapp.com/custom/analysis/' + str(name) + '/'+ str(period) + '/' + str(interval) +'/csv'
+    nameNS = name + '.NS'
+    df = yf.download(tickers=nameNS, period=period, interval=interval)
+    df[interval] = df['Close'].pct_change()*100
+    df = df[df['Open'].notna()]
+    df.reset_index(level=0, inplace=True)
+    df['Date']=df['Date'].astype(str)
+    return Response(df.to_json(), mimetype='application/json')
+    # return df.to_html()
+    
+
+
+
+#Google Trends API Integration
+#Gold Data
+#pyspark stock compare report
+#TwitterTrends with Volume
+#BllombergNews,
+#twitter tweets api integration
+#News api integration
+#Shortening lines using single function different action
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
