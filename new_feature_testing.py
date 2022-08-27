@@ -182,3 +182,4 @@ def mffull():
 def mf():
     df = mffull()
     return render_template('view.html',tables=[df.to_html()])
+    
