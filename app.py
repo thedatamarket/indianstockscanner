@@ -474,7 +474,7 @@ def mmi():
     
 
 
-
+    
 #Google Trends API Integration
 #Gold Data
 #pyspark stock compare report

@@ -163,3 +163,22 @@ def mffullapi():
 def mffullapi():
     df = mffull()
     return render_template('view.html',tables=[df.to_html()])
+
+#%%
+def mffull():
+    k = 'https://www.amfiindia.com/spages/NAVAll.txt'
+    response = requests.get(k)
+    df = pd.DataFrame( columns=['Scheme Code','ISIN Div Payout/ ISIN Growth','ISIN Div Reinvestment','Scheme Name','Net Asset Value','Date'])
+    data = response.text.split("\n")
+    for scheme_data in data:
+        if ";INF" in scheme_data:
+            scheme = scheme_data.split(";")
+            scheme[5] = scheme[5].replace('\r','')
+            if 'Aug-2022' in scheme[5]:
+                df.loc[len(df)] = scheme
+    return df
+
+@app.route('/mf')
+def mf():
+    df = mffull()
+    return render_template('view.html',tables=[df.to_html()])
