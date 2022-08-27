@@ -451,7 +451,8 @@ def analysisapi(name,period,interval):
     df[interval] = df['Close'].pct_change()*100
     df = df[df['Open'].notna()]
     df.reset_index(level=0, inplace=True)
-    df['Date']=df['Date'].astype(str)
+    df['index']=df['index'].astype(str)
+    df = df.rename({'index': 'Date'}, axis=1)
     return Response(df.to_json(), mimetype='application/json')
     # return df.to_html()
     
