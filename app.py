@@ -470,8 +470,7 @@ def mmi():
     dom = etree.HTML(str(soup))
     mmi = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/span')[0].text
     day = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/p/text()[2]')[0]
-    return render_template("MMI.html",mmi_page = mmi,last_updated = day)   
-    
+    return render_template("MMI.html",mmi_page = mmi,last_updated = day)
 
 
     
