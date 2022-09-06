@@ -470,8 +470,32 @@ def mmi():
     dom = etree.HTML(str(soup))
     mmi = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/span')[0].text
     day = dom.xpath('//*[@id="app-container"]/div/div[1]/div[1]/div/div[2]/p/text()[2]')[0]
-    return render_template("MMI.html",mmi_page = mmi,last_updated = day)   
-    
+    return render_template("MMI.html",mmi_page = mmi,last_updated = day)
+
+# MF Bhav Sheet https://www.amfiindia.com/nav-history-download
+
+def mffull():
+    k = 'https://www.amfiindia.com/spages/NAVAll.txt'
+    response = requests.get(k)
+    df = pd.DataFrame( columns=['Scheme Code','ISIN Div Payout/ ISIN Growth','ISIN Div Reinvestment','Scheme Name','Net Asset Value','Date'])
+    data = response.text.split("\n")
+    for scheme_data in data:
+        if ";INF" in scheme_data:
+            scheme = scheme_data.split(";")
+            scheme[5] = scheme[5].replace('\r','')
+            if 'Sep-2022' in scheme[5]:
+                df.loc[len(df)] = scheme
+    return df
+
+@app.route('/mffull/api') 
+def mffullapi():
+    df = mffull()
+    return Response(df.to_json(), mimetype='application/json')
+
+@app.route('/mffull')
+def mfview():
+    df = mffull()
+    return render_template('view.html',tables=[df.to_html()])
 
 
     
