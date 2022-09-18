@@ -486,7 +486,7 @@ def mmi():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=10000)
 
 # Deployment to Heroku Instructions (Heroku Git)
 # Sign up for a free heroku account if you havent already done so
